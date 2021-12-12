@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Form, InputNumber} from "antd";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { Typography} from 'antd';
+import {allocate} from "../api/api";
 
 class InputForm extends React.Component{
     constructor(props){
@@ -38,8 +39,8 @@ class InputForm extends React.Component{
         );
     };
 
-    handleSubmit = () => {
-        this.setState({loading: true, showGraph:true});
+    handleSubmit = async () => {
+        await this.setState({loading: true, showGraph: true})
         console.log(this.state)
         // this.props.actions.saveUserInput({amount: parseInt(this.state.amount), strategies:this.state.strategies}).then( () =>{
         //     this.setState({"loading": false});
@@ -102,7 +103,6 @@ class InputForm extends React.Component{
                                 color="primary"
                                 className='submit-button'
                                 onClick={this.handleSubmit}>
-                            {/*{this.state.loading && <CircularProgress size={24} />}*/}
                             Submit
                         </Button>
                     </Form>
@@ -110,8 +110,7 @@ class InputForm extends React.Component{
 
 
                 </Typography>
-                {this.state.amount}
-                {this.state.showGraph}
+                {this.state.showGraph ? 'haha' : 'fuck'}
             </div>
 
         )
