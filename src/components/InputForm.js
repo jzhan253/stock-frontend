@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button, Col, Form, Input, InputNumber, PageHeader, Row} from "antd";
+import {Button, Form, InputNumber} from "antd";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import { Typography, Divider } from 'antd';
+import { Typography} from 'antd';
 
 class InputForm extends React.Component{
     constructor(props){
@@ -54,7 +54,7 @@ class InputForm extends React.Component{
             "Quality Investing",
             "Value Investing"
         ];
-        const { Title, Paragraph, Text, Link } = Typography;
+        const { Title, Paragraph} = Typography;
         return (
             <div className='input-form'>
                 <Typography className='Typography'>
