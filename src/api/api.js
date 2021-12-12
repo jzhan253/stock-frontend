@@ -11,7 +11,7 @@ export const suggest = async (userInput) => {
     });
 };
 
-export const suggest = async () => {
+export const weeklyTrend = async () => {
 
     return fetch('/weeklytrend', {
         method: 'GET',
