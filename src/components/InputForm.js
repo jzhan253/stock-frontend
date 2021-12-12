@@ -6,7 +6,7 @@ import { Typography, Divider } from 'antd';
 class InputForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = {amount: 5000, strategies: [], loading: false};
+        this.state = {amount: 5000, strategies: [], loading: false, showGraph: false};
 
     }
 
@@ -19,14 +19,10 @@ class InputForm extends React.Component{
     };
 
     setAmount = e => {
-        this.setState({amount: e.target.value});
+        console.log(e)
+        this.setState({amount: e});
     };
 
-    onChange = checkedValues => {
-        this.setState(() => {
-            return { strategies: checkedValues };
-        });
-    };
 
     setStrategies  = strategy => event => {
         if(event.target.checked) {
@@ -38,8 +34,16 @@ class InputForm extends React.Component{
 
     isDisabled = id => {
         return (
-            this.state.strategies.length > 2 && this.state.strategies.indexOf(id) === -1
+            this.state.strategies.length > 1 && this.state.strategies.indexOf(id) === -1
         );
+    };
+
+    handleSubmit = () => {
+        this.setState({loading: true, showGraph:true});
+        console.log(this.state)
+        // this.props.actions.saveUserInput({amount: parseInt(this.state.amount), strategies:this.state.strategies}).then( () =>{
+        //     this.setState({"loading": false});
+        // });
     };
 
     render() {
@@ -53,9 +57,9 @@ class InputForm extends React.Component{
         const { Title, Paragraph, Text, Link } = Typography;
         return (
             <div className='input-form'>
-                <Typography>
-                    <Title level={3}>Welcome to Stock Advisor</Title>
-                    <Paragraph>
+                <Typography className='Typography'>
+                    <Title level={3} className='title'>Welcome to Stock Advisor</Title>
+                    <Paragraph className='subtitle'>
                         Please Enter your investment amount and chose your strategies
                     </Paragraph>
                     <Form
@@ -63,21 +67,29 @@ class InputForm extends React.Component{
                         onFinish={this.onFinish}
                         onFinishFailed={this.onFinishFailed}
                         autoComplete="off"
+                        className='stockInputForm'
                     >
 
                         <Form.Item
+                            className='InputAmount'
                             label="Money"
                             name="money"
                             rules={[{required:true, message:'Please enter a number'}]}
                         >
-                            <InputNumber style={{width:'50%'}}/>
+                            <InputNumber style={{width:'50%'}}
+                                         defaultValue={this.state.amount}
+                                         onChange={this.setAmount}
+                            />
                         </Form.Item>
-                        <Form.Item>
+                        <Form.Item className='InputCheckbox'>
                             <Paragraph>Choose one or two investment Strategies</Paragraph>
                             {names.map(name =>(
-                                <Checkbox.Group onChange={this.onChange}>
+                                <Checkbox.Group >
                                     <Checkbox value={name}
-                                              disabled={this.isDisabled(name)}>
+                                              onChange={this.setStrategies(name)}
+                                              disabled={this.isDisabled(name)}
+                                              label={name}
+                                              checked={this.state.strategies.indexOf(name) > -1}>
                                         {name}
                                     </Checkbox>
                                 </Checkbox.Group>
@@ -85,17 +97,21 @@ class InputForm extends React.Component{
                             )}
 
                         </Form.Item>
-                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                        </Form.Item>
+                        <Button disabled={this.state.strategies.length < 1 || this.state.strategies.length > 2
+                        || this.state.loading || this.state.amount<5000}
+                                color="primary"
+                                className='submit-button'
+                                onClick={this.handleSubmit}>
+                            {/*{this.state.loading && <CircularProgress size={24} />}*/}
+                            Submit
+                        </Button>
                     </Form>
 
 
 
                 </Typography>
-
+                {this.state.amount}
+                {this.state.showGraph}
             </div>
 
         )
