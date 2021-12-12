@@ -5,7 +5,7 @@ class MarketTrend extends React.Component{
 
     render() {
         return (
-            <div>Stock
+            <div>
                 <StockWidget/>
             </div>
 

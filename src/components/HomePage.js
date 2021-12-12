@@ -3,8 +3,6 @@ import {Row, Col, Layout} from "antd";
 import InputForm from "./InputForm";
 import MarketTrend from "./MarketTrend";
 
-
-
 class HomePage extends React.Component{
 
     render() {

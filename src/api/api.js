@@ -1,6 +1,5 @@
 
 export const suggest = async (userInput) => {
-
     return fetch('/suggest', {
         method: 'POST',
         body: JSON.stringify(userInput),
@@ -8,6 +7,11 @@ export const suggest = async (userInput) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
+    }).then((response) => {
+        if(response.status !== 200) {
+            throw Error('Unable to fetch data!');
+        }
+        return response.json();
     });
 };
 

@@ -1,26 +1,28 @@
 import React from 'react';
 import {Button, Form, InputNumber} from "antd";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import { Typography} from 'antd';
-import {allocate} from "../api/api";
+import { Typography } from 'antd';
+import { suggest } from "../api/api";
+import AllocationTable from "./AllocationTable";
+import StockPieChart from "./StockPieChart";
 
 class InputForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = {amount: 5000, strategies: [], loading: false, showGraph: false};
+        this.state = {
+            amount: 5000,
+            strategies: [],
+            loading: false,
+            showGraph: false,
+            allocation: [],
+            pie_chart_data: [],
+            weekly_trend: [],
+            weekly_trend_by_stock: []
+        };
 
     }
 
-    onFinish(values){
-        console.log('Success:', values);
-    };
-
-    onFinishFailed(errorInfo){
-        console.log('Failed:', errorInfo);
-    };
-
     setAmount = e => {
-        console.log(e)
         this.setState({amount: e});
     };
 
@@ -39,9 +41,34 @@ class InputForm extends React.Component{
         );
     };
 
+    handleReset = async () => {
+        await this.setState({
+            amount: 5000,
+            strategies: [],
+            loading: false,
+            showGraph: false,
+            allocation: [],
+            pie_chart_data: [],
+            weekly_trend: [],
+            weekly_trend_by_stock: []
+        })
+    }
+
+    refreshPage() {
+        window.location.reload(false);
+    }
+
     handleSubmit = async () => {
-        await this.setState({loading: true, showGraph: true})
-        console.log(this.state)
+        await this.setState({loading: true})
+        await suggest(this.state).then((response) => {
+            this.setState({
+                allocation: response.allocation,
+                pie_chart_data: response.pie_chart_data,
+                weekly_trend: response.weekly_trend,
+                weekly_trend_by_stock: response.weekly_trend_by_stock,
+                showGraph: true
+            })
+        });
         // this.props.actions.saveUserInput({amount: parseInt(this.state.amount), strategies:this.state.strategies}).then( () =>{
         //     this.setState({"loading": false});
         // });
@@ -105,12 +132,19 @@ class InputForm extends React.Component{
                                 onClick={this.handleSubmit}>
                             Submit
                         </Button>
+
                     </Form>
-
-
-
                 </Typography>
-                {this.state.showGraph ? 'haha' : 'fuck'}
+                {this.state.showGraph &&
+                    <div>
+                        <strong>Investment Allocation Table</strong>
+                        <AllocationTable allocations={this.state.allocation} />
+                        <hr/>
+                        <strong>Investment Advice Pie Chart</strong>
+                        <StockPieChart piechartData={this.state.pie_chart_data} />
+                        <Button onClick={this.refreshPage}>Reset</Button>
+                    </div>
+                }
             </div>
 
         )
