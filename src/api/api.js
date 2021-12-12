@@ -1,5 +1,4 @@
 
-
 export const allocate = async (userInput) => {
 
     return fetch('/allocate', {
